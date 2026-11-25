@@ -1,5 +1,6 @@
 <meta charset="utf-8">
 <title>frank for UNC</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,7 +63,20 @@ a{color:inherit}
 .btn-msg{background:#fff;color:#0B1220;font:500 clamp(17px,1.5vw,20px)/1 var(--f-body);letter-spacing:-.015em;border-radius:16px;padding:16px 24px 16px 18px;gap:12px;box-shadow:0 12px 40px -12px rgba(123,175,212,.55)}
 .btn-msg:hover{box-shadow:0 16px 50px -12px rgba(123,175,212,.8)}
 .msg-ic{width:28px;height:28px;flex:none;display:block}
-@media (max-width:1000px){.hero-grid{grid-template-columns:1fr;justify-items:center;gap:40px}.hero-title{width:100%;min-height:calc(100svh - 200px);display:flex;align-items:center;justify-content:center;text-align:center}.hero .hero-title h1{font-size:clamp(30px,8.6vw,84px)}.hero-grid>.phone-wrap{order:2}.hero-cta{order:3;align-items:center;text-align:center}}
+@media (max-width:1000px){
+  .hero{min-height:auto;display:block;padding-top:calc(env(safe-area-inset-top,0px) + 96px);padding-bottom:56px}
+  .hero>.wrap{padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+  .hero-grid{grid-template-columns:minmax(0,1fr);gap:28px;justify-items:center}
+  .hero-title{width:100%;text-align:center}
+  .hero .hero-title h1{font-size:clamp(28px,8.4vw,64px);margin:0}
+  .hero-cta{order:2;align-items:center;text-align:center;gap:14px}
+  .hero-cta .lede{max-width:24em;margin-inline:auto}
+  .hero-grid>.phone-wrap{order:3;margin-top:12px}
+  .nav{padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px))}
+  .nav-inner{padding:6px 6px 6px 10px}
+  .btn-sm{padding:10px 14px;font-size:14px}
+  .logo{font-size:25px}
+}
 .hero-title{position:relative;z-index:3;container-type:inline-size}
 .hero h1{font-size:min(84px,calc(100cqw / 7.75));line-height:1.02;letter-spacing:-.045em;margin:0 0 0 -.03em;white-space:nowrap}
 .hero h1 .line{display:block}
@@ -241,6 +255,23 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px 32px;justify-content:space-bet
 footer .logo{color:var(--navy);padding-left:0}
 footer .logo span{color:var(--carolina-deep)}
 footer p{max-width:46em}
+
+/* nav over the light half of the page */
+.nav.onlight .logo{color:var(--navy)}
+.nav.onlight .logo span{color:var(--carolina-deep)}
+.nav.onlight .btn-sm{background:var(--carolina-deep);border-color:rgba(255,255,255,.25);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 6px 16px -8px rgba(47,110,156,.7)}
+.nav.onlight.scrolled .nav-inner{background:rgba(255,255,255,.62);border-color:rgba(11,26,46,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 10px 30px -14px rgba(11,26,46,.3)}
+@media (max-width:900px){
+  .step .inline-phone .phone{aspect-ratio:318/560}
+  .card{padding:28px 22px 0;min-height:0}
+  .viz{padding:22px 0 24px}
+  .h2{font-size:clamp(32px,9vw,48px)}
+  .story{padding-block:88px 24px}
+  .howto{padding-block:88px 24px}
+  .trust{padding-block:56px}
+  .join{padding-block:40px 80px}
+  .form-card{padding:28px 22px 26px}
+}
 
 /* ---------- Scroll-driven reveals (no-op where unsupported, so the page is complete at rest) ---------- */
 @supports (animation-timeline: view()){
@@ -476,7 +507,8 @@ footer p{max-width:46em}
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const nav=document.getElementById('nav');
-  const onScroll=()=>nav.classList.toggle('scrolled',scrollY>30);
+  const lightEl=document.querySelector('.light');
+  const onScroll=()=>{nav.classList.toggle('scrolled',scrollY>30);nav.classList.toggle('onlight',lightEl.getBoundingClientRect().top<50)};
   addEventListener('scroll',onScroll,{passive:true});onScroll();
 
   /* ---- Course marquee ---- */
