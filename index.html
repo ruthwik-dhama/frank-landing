@@ -15,8 +15,8 @@
   --imsg:#0A84FF; --bubble-in:#2A2A2D;
   --f-display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter",system-ui,sans-serif;
   --f-body:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",system-ui,sans-serif;
-  --f-mono:ui-monospace,"SF Mono","Geist Mono",Menlo,monospace;
-  --f-logo:"Bricolage Grotesque","Inter",system-ui,sans-serif; --navy:#13294B;
+  --f-mono:var(--f-body);
+  --f-logo:"Bricolage Grotesque","Inter",system-ui,sans-serif; --navy:#13294B; --edge:48px;
   --ease:cubic-bezier(.22,1,.36,1);
   color-scheme:dark;
 }
@@ -30,11 +30,12 @@ a{color:inherit}
 :focus-visible{outline:2px solid var(--carolina);outline-offset:3px;border-radius:8px}
 
 /* ---------- Nav (floating pill, Framer-style) ---------- */
-.nav{position:fixed;z-index:50;left:0;right:0;top:calc(14px + env(safe-area-inset-top,0px));display:flex;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));pointer-events:none}
-.nav-inner{pointer-events:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:8px 10px 8px 16px;border-radius:20px;border:1px solid transparent;transition:background .5s var(--ease),border-color .5s,box-shadow .5s,backdrop-filter .5s;animation:navIn .9s var(--ease) .1s both}
-.nav.scrolled .nav-inner{background:rgba(8,16,30,.42);border-color:rgba(255,255,255,.1);backdrop-filter:blur(24px) saturate(170%);-webkit-backdrop-filter:blur(24px) saturate(170%);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 10px 30px -12px rgba(0,0,0,.6)}
+.nav{position:fixed;z-index:50;left:0;right:0;top:calc(14px + env(safe-area-inset-top,0px));display:flex;padding-left:max(var(--edge),env(safe-area-inset-left,0px));padding-right:max(var(--edge),env(safe-area-inset-right,0px));pointer-events:none}
+.nav-inner{pointer-events:auto;position:relative;isolation:isolate;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:8px 0;animation:navIn .9s var(--ease) .1s both}
+.nav-inner::before{content:"";position:absolute;z-index:-1;inset:0 -14px;border-radius:20px;border:1px solid transparent;transition:background .5s var(--ease),border-color .5s,box-shadow .5s}
+.nav.scrolled .nav-inner::before{background:rgba(8,16,30,.42);border-color:rgba(255,255,255,.1);backdrop-filter:blur(24px) saturate(170%);-webkit-backdrop-filter:blur(24px) saturate(170%);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 10px 30px -12px rgba(0,0,0,.6)}
 @keyframes navIn{from{opacity:0;transform:translateY(-14px);filter:blur(6px)}}
-.logo{display:inline-flex;align-items:center;padding:0 6px 3px;color:var(--on-ink);font:800 28px/1 var(--f-logo);letter-spacing:-.05em;text-decoration:none}
+.logo{display:inline-flex;align-items:center;padding:0 0 3px;color:var(--on-ink);font:800 28px/1 var(--f-logo);letter-spacing:-.05em;text-decoration:none}
 .logo span{color:var(--carolina)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;font:600 15px/1 var(--f-body);letter-spacing:-.01em;border-radius:999px;padding:13px 20px;text-decoration:none;transition:transform .35s var(--ease),background .25s,box-shadow .35s var(--ease)}
 .btn:hover{transform:translateY(-1px)}
@@ -56,7 +57,7 @@ a{color:inherit}
    radial-gradient(45% 40% at 10% 100%,rgba(123,175,212,.12),transparent 70%),
    linear-gradient(180deg,#03070E,var(--ink) 60%)}
 .hero::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.13;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.hero>.wrap{max-width:none;padding-left:max(42px,env(safe-area-inset-left,0px));padding-right:max(30px,env(safe-area-inset-right,0px))}
+.hero>.wrap{max-width:none;padding-left:max(var(--edge),env(safe-area-inset-left,0px));padding-right:max(var(--edge),env(safe-area-inset-right,0px))}
 .hero>.wrap{max-width:1440px}
 .hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr) 318px minmax(0,1fr);gap:clamp(40px,6vw,110px);align-items:center}
 .hero-cta{display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:18px;width:100%;animation:rise 1s var(--ease) .9s both}
@@ -65,20 +66,18 @@ a{color:inherit}
 .msg-ic{width:28px;height:28px;flex:none;display:block}
 @media (max-width:1000px){
   .hero{min-height:auto;display:block;padding-top:calc(env(safe-area-inset-top,0px) + 96px);padding-bottom:56px}
-  .hero>.wrap{padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
   .hero-grid{grid-template-columns:minmax(0,1fr);gap:28px;justify-items:center}
   .hero-title{width:100%;text-align:center}
   .hero .hero-title h1{font-size:clamp(28px,8.4vw,64px);margin:0}
   .hero-cta{order:2;align-items:center;text-align:center;gap:14px}
   .hero-cta .lede{max-width:24em;margin-inline:auto}
   .hero-grid>.phone-wrap{order:3;margin-top:12px}
-  .nav{padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px))}
-  .nav-inner{padding:6px 6px 6px 10px}
+  :root{--edge:20px}
   .btn-sm{padding:10px 14px;font-size:14px}
   .logo{font-size:25px}
 }
 .hero-title{position:relative;z-index:3;container-type:inline-size}
-.hero h1{font-size:min(84px,calc(100cqw / 7.75));line-height:1.02;letter-spacing:-.045em;margin:0 0 0 -.03em;white-space:nowrap}
+.hero h1{font-size:min(84px,calc(100cqw / 7.75));line-height:1.02;letter-spacing:-.045em;margin:0 0 0 -.015em;white-space:nowrap}
 .hero h1 .line{display:block}
 .hero h1 .w{display:inline-block;animation:blurIn 1s var(--ease) both}
 @keyframes blurIn{from{opacity:0;filter:blur(14px);transform:translateY(18px)}}
@@ -138,37 +137,20 @@ a{color:inherit}
 .compose .gbtn{margin:0;width:36px;padding:0}
 .inputbar{flex:1;display:flex;align-items:center;justify-content:space-between;height:36px;border-radius:999px;padding:0 12px 0 14px;font-size:13px;color:rgba(255,255,255,.45);background:rgba(58,58,64,.45);backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
 
-/* ---------- Course marquee ---------- */
-.marquee{border-block:1px solid var(--line-dark);overflow:hidden;padding:18px 0;mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
-.track{display:flex;gap:44px;width:max-content;animation:slide 48s linear infinite;font:500 14px var(--f-mono);color:#5E7088;letter-spacing:.02em}
-.track span{white-space:nowrap}
-.track span::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--carolina);opacity:.7;margin-right:12px;vertical-align:middle}
-@keyframes slide{to{transform:translateX(-50%)}}
 
 /* ---------- Story (pinned phone) ---------- */
 .section-head{max-width:760px}
-.eyebrow{font:500 12px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--carolina)}
+.eyebrow{font:500 15px var(--f-body);letter-spacing:-.005em;color:var(--carolina)}
 .h2{font-size:clamp(36px,5vw,64px);line-height:1.02;letter-spacing:-.04em;margin-top:16px}
 .sub{color:var(--on-ink-muted);font-size:18px;margin-top:18px;max-width:36em}
-.story{padding-block:120px 60px}
-.story-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;margin-top:40px}
-.steps{display:flex;flex-direction:column}
-.step{min-height:78vh;display:flex;flex-direction:column;justify-content:center;gap:14px;opacity:.28;transition:opacity .6s var(--ease)}
-.step.active{opacity:1}
-.step .time{font:500 13px var(--f-mono);color:var(--carolina);letter-spacing:.04em;display:flex;align-items:center;gap:10px}
-.step .time::before{content:"";width:28px;height:1px;background:currentColor;opacity:.6}
-.step h3{font-size:clamp(28px,3.2vw,42px);line-height:1.05;letter-spacing:-.035em}
-.step p{color:var(--on-ink-muted);font-size:17px;max-width:28em}
-.step .inline-phone{display:none}
-.pin{position:sticky;top:calc(50vh - 325px);height:650px}
-@media (max-width:900px){
-  .hero-grid,.story-grid{grid-template-columns:1fr}
-  .hero{min-height:auto;padding-top:calc(env(safe-area-inset-top,0px) + 112px)}
-  .pin{display:none}
-  .step{min-height:auto;opacity:1;padding-block:44px;border-top:1px solid var(--line-dark)}
-  .step .inline-phone{display:block;margin-top:18px}
-  .step .inline-phone .phone{width:min(300px,100%)}
-}
+.story{padding-block:120px 20px}
+.story-cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:20px;margin-top:56px}
+.sc3{grid-column:span 3}
+.sc2{grid-column:span 2}
+.when{align-self:center;font-size:12px;color:rgba(255,255,255,.55);margin:0 0 4px}
+.card.blue .when{color:rgba(255,255,255,.75)}
+.mini .msg{max-width:88%}
+@media (max-width:980px){.story-cards{grid-template-columns:1fr}.sc3,.sc2{grid-column:auto}}
 
 /* ---------- Light half (Loop) ---------- */
 .light{background:var(--paper);color:var(--on-paper);border-radius:40px 40px 0 0;position:relative;z-index:2;color-scheme:light}
@@ -179,11 +161,11 @@ a{color:inherit}
 .card{position:relative;overflow:hidden;border-radius:32px;padding:34px 32px 0;display:flex;flex-direction:column;gap:14px;min-height:500px;background:linear-gradient(180deg,#F4F7FA,#EAEFF4);border:1px solid rgba(255,255,255,.9);box-shadow:inset 0 1px 0 #fff,0 30px 60px -40px rgba(11,26,46,.35);transition:transform .6s var(--ease),box-shadow .6s var(--ease)}
 .card:hover{transform:translateY(-6px);box-shadow:inset 0 1px 0 #fff,0 40px 80px -40px rgba(11,26,46,.45)}
 .card.blue{background:linear-gradient(180deg,#8DBDE0,#5E97C7);border-color:rgba(255,255,255,.35)}
-.card h3{font-size:clamp(24px,2.1vw,30px);line-height:1.18;letter-spacing:-.03em;color:var(--on-paper);display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.card h3{font-size:clamp(24px,2.1vw,30px);line-height:1.18;letter-spacing:-.03em;color:var(--on-paper);display:block}
 .card.blue h3,.card.blue p{color:#fff}
 .card p{font-size:16.5px;line-height:1.5;max-width:26em}
 .card.blue p{opacity:.92}
-.tag{display:inline-flex;align-items:center;gap:6px;padding:3px 14px 4px;border-radius:999px;font-weight:590;background:#fff;color:var(--on-paper);box-shadow:inset 0 1px 0 #fff,0 2px 8px -2px rgba(11,26,46,.18);border:1px solid rgba(11,26,46,.06)}
+.tag{display:inline-flex;align-items:center;gap:6px;margin:2px 1px;padding:3px 14px 4px;border-radius:999px;font-weight:590;background:#fff;color:var(--on-paper);box-shadow:inset 0 1px 0 #fff,0 2px 8px -2px rgba(11,26,46,.18);border:1px solid rgba(11,26,46,.06)}
 .card.blue .tag{background:rgba(255,255,255,.24);color:#fff;border-color:rgba(255,255,255,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
 .tag svg{width:18px;height:18px}
 .viz{margin-top:auto;padding:28px 0 32px;display:flex;flex-direction:column;gap:10px;align-items:stretch}
@@ -215,6 +197,7 @@ a{color:inherit}
 .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:56px}
 .three.small{margin-top:20px}
 .card.soft{min-height:0;padding-bottom:32px}
+.nb{white-space:nowrap}
 .tag.mono{font:500 .78em var(--f-mono);padding:5px 12px}
 .perm{padding:6px 16px}
 .perm .row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;font-size:14.5px;border-bottom:1px solid rgba(255,255,255,.12)}
@@ -260,9 +243,8 @@ footer p{max-width:46em}
 .nav.onlight .logo{color:var(--navy)}
 .nav.onlight .logo span{color:var(--carolina-deep)}
 .nav.onlight .btn-sm{background:var(--carolina-deep);border-color:rgba(255,255,255,.25);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 6px 16px -8px rgba(47,110,156,.7)}
-.nav.onlight.scrolled .nav-inner{background:rgba(255,255,255,.62);border-color:rgba(11,26,46,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 10px 30px -14px rgba(11,26,46,.3)}
+.nav.onlight.scrolled .nav-inner::before{background:rgba(255,255,255,.62);border-color:rgba(11,26,46,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 10px 30px -14px rgba(11,26,46,.3)}
 @media (max-width:900px){
-  .step .inline-phone .phone{aspect-ratio:318/560}
   .card{padding:28px 22px 0;min-height:0}
   .viz{padding:22px 0 24px}
   .h2{font-size:clamp(32px,9vw,48px)}
@@ -323,33 +305,56 @@ footer p{max-width:46em}
   </div>
 </header>
 
-<div class="marquee" aria-hidden="true"><div class="track" id="track"></div></div>
 
-<section class="story" id="week">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <span class="eyebrow">A week with frank</span>
-      <h2 class="h2">It texts you first, so nothing sneaks up on you.</h2>
-    </div>
-    <div class="story-grid">
-      <div class="steps" id="steps"></div>
-      <div class="pin" aria-hidden="true">
-        <div class="phone">
-          <div class="screen">
-            <div class="island"></div>
-            <div class="status"><span id="pinClock">6:45</span><span style="font-size:12px;opacity:.8">●●●● 5G</span></div>
-            <div class="chat-head"><span class="gbtn back"><svg width="11" height="18" viewBox="0 0 11 18" aria-hidden="true"><path d="M9 2 2 9l7 7" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><b>3</b></span><div class="who"><div class="avatar"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="#7BAFD4"/><path d="M34.09 81.34V52.46H27.56V42.09L41.95 43.07V42.36Q36.5 41.73 33.73 39.76Q30.96 37.8 30.02 35.29Q29.08 32.79 29.08 30.73Q29.08 26.71 31.27 23.71Q33.46 20.72 37.35 19.11Q41.24 17.5 46.16 17.5Q50.18 17.5 53.35 18.57Q56.53 19.65 59.12 21.7L57.96 34.93Q55.54 33.24 53.31 32.39Q51.07 31.54 48.75 31.54Q46.07 31.54 44.32 32.7Q42.58 33.86 42.58 36.37Q42.58 37.71 43.29 38.87Q44.01 40.03 45.57 40.7Q47.14 41.37 49.82 41.37H58.76V52.46H48.39V81.34Z" fill="#13294B"/><path d="M63.14 82.5Q58.58 82.5 56.3 80.53Q54.02 78.57 54.02 74.45Q54.02 70.25 56.3 68.28Q58.58 66.32 63.14 66.32Q67.79 66.32 70.12 68.28Q72.44 70.25 72.44 74.45Q72.44 82.5 63.14 82.5Z" fill="#FFFFFF"/></svg></div><span class="name">frank <svg width="6" height="10" viewBox="0 0 6 10" aria-hidden="true"><path d="m1 1 4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><span class="gbtn vid"><svg width="22" height="15" viewBox="0 0 22 15" aria-hidden="true"><rect x="1" y="1.5" width="14" height="12" rx="3" fill="none" stroke="#fff" stroke-width="1.8"/><path d="M15.5 6 20.5 3v9l-5-3z" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/></svg></span></div>
-            <div class="thread" id="pinThread"></div>
-            <div class="compose"><span class="gbtn plus"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v12M2 8h12" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></span><div class="inputbar"><span>iMessage</span><svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true" fill="currentColor"><rect x="0" y="5" width="2" height="4" rx="1"/><rect x="4" y="2" width="2" height="10" rx="1"/><rect x="8" y="0" width="2" height="14" rx="1"/><rect x="12" y="3" width="2" height="8" rx="1"/><rect x="16" y="5" width="2" height="4" rx="1"/></svg></div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
 
 <div class="light">
+  <section class="story" id="week">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">A week with frank</span>
+        <h2 class="h2">It texts you first, so nothing sneaks up on you.</h2>
+      </div>
+      <div class="story-cards">
+        <article class="card blue sc3 reveal">
+          <h3>Missing work, the <span class="tag">same evening</span></h3>
+          <p>If something slips past its deadline, you hear about it that night, not at the end of the semester.</p>
+          <div class="viz"><div class="panel mini"><div class="when">Mon, Oct 19 · 6:45 PM</div><div class="msg in">Missing:
+– ENGL 150: Reading response 6 (was due 5:00pm)</div><div class="msg out">omg submitting rn</div></div></div>
+        </article>
+        <article class="card sc3 reveal reveal-d1">
+          <h3>Ask anything. The <span class="tag">answer</span> comes first.</h3>
+          <p>What's due, your grade, what you need on the final. frank does the math with your course's real weights.</p>
+          <div class="viz"><div class="panel mini"><div class="when">Mon, Oct 19 · 9:12 PM</div><div class="msg out">whats due this week</div><div class="msg in">3 things:
+– Tue ECON 210: Problem Set 5
+– Thu DATA 101: Lab 6
+– Fri STOR 155: Quiz 4</div></div></div>
+        </article>
+        <article class="card sc2 reveal reveal-d2">
+          <h3>A <span class="tag">nudge</span> before every deadline</h3>
+          <p>24 hours and 3 hours before anything is due. New grades and announcements too, within half an hour.</p>
+          <div class="viz"><div class="panel mini"><div class="when">Thu, Oct 22 · 8:59 PM</div><div class="msg in">due in 3h: HIST 128 Response paper 2, 11:59pm</div><div class="msg out">on it</div></div></div>
+        </article>
+        <article class="card sc2 reveal">
+          <h3>The <span class="nb"><span class="tag">week ahead</span>,</span> every Sunday</h3>
+          <p>Everything due in the coming week, and how your grades moved.</p>
+          <div class="viz"><div class="panel mini"><div class="when">Sun, Oct 25 · 6:00 PM</div><div class="msg in">this week:
+– Tue ECON 210: Problem Set 5
+– Thu DATA 101: Lab 6
+ECON 210 is up to 87.4%.</div></div></div>
+        </article>
+        <article class="card sc2 reveal reveal-d1">
+          <h3>A <span class="tag">brief</span> before your first class</h3>
+          <p>Classes, rooms and what's due in the next 48 hours. Pick your own time with /brief.</p>
+          <div class="viz"><div class="panel mini"><div class="when">Mon, Oct 19 · 7:00 AM</div><div class="msg in">morning. Monday, Oct 19
+Classes: 9:05am DATA 101 (Phillips 215)
+Due in the next 48h:
+– Tue 11:59pm ECON 210: Problem Set 4</div><div class="msg out">/brief 8:00</div><div class="msg in">done. your brief comes at 8:00am from tomorrow.</div></div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
   <section class="howto">
     <div class="wrap">
       <div class="section-head reveal">
@@ -511,10 +516,6 @@ footer p{max-width:46em}
   const onScroll=()=>{nav.classList.toggle('scrolled',scrollY>30);nav.classList.toggle('onlight',lightEl.getBoundingClientRect().top<50)};
   addEventListener('scroll',onScroll,{passive:true});onScroll();
 
-  /* ---- Course marquee ---- */
-  const courses=['ECON 210','STOR 155','DATA 101','ENGL 150','HIST 128','COMP 110','BIOL 101','CHEM 101','PSYC 101','MATH 231','POLI 100','PHIL 101','COMP 210','SOCI 101'];
-  const track=document.getElementById('track');
-  track.innerHTML=[...courses,...courses].map(c=>`<span>${c}</span>`).join('');
 
   /* ---- Helpers ---- */
   const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
@@ -565,38 +566,6 @@ footer p{max-width:46em}
       t+= m[0]==='in'?900:700;
     });
     setTimeout(()=>{const r=heroThread.querySelector('.receipt');if(r)r.innerHTML='<b>Read</b> 9:13 PM'},t+600);
-  }
-
-  /* ---- Week story with pinned phone ---- */
-  const steps=[
-    {time:'Monday, 6:45pm',clock:'6:45',title:'Missing work, the same evening.',body:"If something slips past its deadline, you hear about it that night, not at the end of the semester.",stamp:'Mon, Oct 19 at 6:45 PM',
-     msgs:[['in','Missing:\n– ENGL 150: Reading response 6 (was due 5:00pm)'],['out','omg submitting rn']]},
-    {time:'Monday, 9:12pm',clock:'9:12',title:'Ask anything. The answer comes first.',body:"What's due, your grade, what you need on the final, your GPA. frank does the math with your course's real weights and tells you straight.",stamp:'Mon, Oct 19 at 9:12 PM',
-     msgs:[['out','whats due this week'],['in','3 things:\n– Tue ECON 210: Problem Set 5\n– Thu DATA 101: Lab 6\n– Fri STOR 155: Quiz 4'],['out','whats my gpa looking like'],['in','3.41 if everything holds where it is now.']]},
-    {time:'Thursday, 8:59pm',clock:'8:59',title:'A nudge before every deadline.',body:'24 hours and 3 hours before anything is due. New grades and announcements too, within half an hour.',stamp:'Thu, Oct 22 at 8:59 PM',
-     msgs:[['in','due in 3h: HIST 128 Response paper 2, 11:59pm'],['out','on it']]},
-    {time:'Sunday, 6:00pm',clock:'6:00',title:'The week ahead, every Sunday.',body:'Everything due in the coming week, and how your grades moved.',stamp:'Sun, Oct 25 at 6:00 PM',
-     msgs:[['in','this week:\n– Tue 11:59pm ECON 210: Problem Set 5\n– Thu 11:59pm DATA 101: Lab 6\n– Fri 10:10am STOR 155: Quiz 4\nECON 210 is up to 87.4%.']]},
-    {time:'Every morning, 7:00am',clock:'7:00',title:'A brief before your first class.',body:'Classes, rooms and what\'s due in the next 48 hours. Change the time whenever you want with /brief.',stamp:'Mon, Oct 19 at 7:00 AM',
-     msgs:[['in','morning. Monday, Oct 19\nClasses: 9:05am DATA 101 (Phillips 215)\nDue in the next 48h:\n– Tue 11:59pm ECON 210: Problem Set 4'],['out','/brief 8:00',1],['in','done. your brief comes at 8:00am from tomorrow.']]}
-  ];
-  const stepsEl=document.getElementById('steps');
-  const phoneTpl=(id)=>`<div class="phone"><div class="screen"><div class="island"></div><div class="status"><span>${steps[id].clock}</span><span style="font-size:12px;opacity:.8">●●●● 5G</span></div><div class="chat-head"><span class="gbtn back"><svg width="11" height="18" viewBox="0 0 11 18" aria-hidden="true"><path d="M9 2 2 9l7 7" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><b>3</b></span><div class="who"><div class="avatar"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="#7BAFD4"/><path d="M34.09 81.34V52.46H27.56V42.09L41.95 43.07V42.36Q36.5 41.73 33.73 39.76Q30.96 37.8 30.02 35.29Q29.08 32.79 29.08 30.73Q29.08 26.71 31.27 23.71Q33.46 20.72 37.35 19.11Q41.24 17.5 46.16 17.5Q50.18 17.5 53.35 18.57Q56.53 19.65 59.12 21.7L57.96 34.93Q55.54 33.24 53.31 32.39Q51.07 31.54 48.75 31.54Q46.07 31.54 44.32 32.7Q42.58 33.86 42.58 36.37Q42.58 37.71 43.29 38.87Q44.01 40.03 45.57 40.7Q47.14 41.37 49.82 41.37H58.76V52.46H48.39V81.34Z" fill="#13294B"/><path d="M63.14 82.5Q58.58 82.5 56.3 80.53Q54.02 78.57 54.02 74.45Q54.02 70.25 56.3 68.28Q58.58 66.32 63.14 66.32Q67.79 66.32 70.12 68.28Q72.44 70.25 72.44 74.45Q72.44 82.5 63.14 82.5Z" fill="#FFFFFF"/></svg></div><span class="name">frank <svg width="6" height="10" viewBox="0 0 6 10" aria-hidden="true"><path d="m1 1 4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><span class="gbtn vid"><svg width="22" height="15" viewBox="0 0 22 15" aria-hidden="true"><rect x="1" y="1.5" width="14" height="12" rx="3" fill="none" stroke="#fff" stroke-width="1.8"/><path d="M15.5 6 20.5 3v9l-5-3z" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/></svg></span></div><div class="thread" data-i="${id}"></div><div class="compose"><span class="gbtn plus"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v12M2 8h12" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></span><div class="inputbar"><span>iMessage</span><svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true" fill="currentColor"><rect x="0" y="5" width="2" height="4" rx="1"/><rect x="4" y="2" width="2" height="10" rx="1"/><rect x="8" y="0" width="2" height="14" rx="1"/><rect x="12" y="3" width="2" height="8" rx="1"/><rect x="16" y="5" width="2" height="4" rx="1"/></svg></div></div></div></div>`;
-  stepsEl.innerHTML=steps.map((s,i)=>`<article class="step${i===0?' active':''}" data-i="${i}"><span class="time">${s.time}</span><h3>${s.title}</h3><p>${esc(s.body)}</p><div class="inline-phone">${phoneTpl(i)}</div></article>`).join('');
-  stepsEl.querySelectorAll('.inline-phone .thread').forEach(el=>{const s=steps[+el.dataset.i];renderThread(el,s.stamp,s.msgs,false)});
-
-  const pinThread=document.getElementById('pinThread'),pinClock=document.getElementById('pinClock');
-  let current=-1;
-  function show(i){
-    if(i===current)return;current=i;
-    stepsEl.querySelectorAll('.step').forEach(s=>s.classList.toggle('active',+s.dataset.i===i));
-    pinClock.textContent=steps[i].clock;
-    renderThread(pinThread,steps[i].stamp,steps[i].msgs,!reduce);
-  }
-  show(0);
-  if('IntersectionObserver' in window){
-    const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)show(+e.target.dataset.i)})},{rootMargin:'-45% 0px -45% 0px'});
-    stepsEl.querySelectorAll('.step').forEach(s=>io.observe(s));
   }
 
   /* ---- Waitlist ---- */
