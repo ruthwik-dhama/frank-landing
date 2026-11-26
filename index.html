@@ -31,9 +31,10 @@ a{color:inherit}
 
 /* ---------- Nav (floating pill, Framer-style) ---------- */
 .nav{position:fixed;z-index:50;left:0;right:0;top:calc(14px + env(safe-area-inset-top,0px));display:flex;padding-left:max(var(--edge),env(safe-area-inset-left,0px));padding-right:max(var(--edge),env(safe-area-inset-right,0px));pointer-events:none}
-.nav-inner{pointer-events:auto;position:relative;isolation:isolate;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:8px 0;animation:navIn .9s var(--ease) .1s both}
-.nav-inner::before{content:"";position:absolute;z-index:-1;inset:0 -14px;border-radius:20px;border:1px solid transparent;transition:background .5s var(--ease),border-color .5s,box-shadow .5s}
-.nav.scrolled .nav-inner::before{background:rgba(8,16,30,.42);border-color:rgba(255,255,255,.1);backdrop-filter:blur(24px) saturate(170%);-webkit-backdrop-filter:blur(24px) saturate(170%);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 10px 30px -12px rgba(0,0,0,.6)}
+.nav-inner{pointer-events:none;position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:8px 0;animation:navIn .9s var(--ease) .1s both}
+.nav-inner>*{pointer-events:auto}
+.logo{transition:opacity .35s var(--ease),transform .35s var(--ease)}
+.nav.scrolled .logo{opacity:0;transform:translateY(-6px);pointer-events:none}
 @keyframes navIn{from{opacity:0;transform:translateY(-14px);filter:blur(6px)}}
 .logo{display:inline-flex;align-items:center;padding:0 0 3px;color:var(--on-ink);font:800 28px/1 var(--f-logo);letter-spacing:-.05em;text-decoration:none}
 .logo span{color:var(--carolina)}
@@ -57,8 +58,7 @@ a{color:inherit}
    radial-gradient(45% 40% at 10% 100%,rgba(123,175,212,.12),transparent 70%),
    linear-gradient(180deg,#03070E,var(--ink) 60%)}
 .hero::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.13;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.hero>.wrap{max-width:none;padding-left:max(var(--edge),env(safe-area-inset-left,0px));padding-right:max(var(--edge),env(safe-area-inset-right,0px))}
-.hero>.wrap{max-width:1440px}
+.hero>.wrap{width:100%;max-width:none;padding-left:max(var(--edge),env(safe-area-inset-left,0px));padding-right:max(var(--edge),env(safe-area-inset-right,0px))}
 .hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr) 318px minmax(0,1fr);gap:clamp(40px,6vw,110px);align-items:center}
 .hero-cta{display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:18px;width:100%;animation:rise 1s var(--ease) .9s both}
 .btn-msg{background:#fff;color:#0B1220;font:500 clamp(17px,1.5vw,20px)/1 var(--f-body);letter-spacing:-.015em;border-radius:16px;padding:16px 24px 16px 18px;gap:12px;box-shadow:0 12px 40px -12px rgba(123,175,212,.55)}
@@ -144,13 +144,25 @@ a{color:inherit}
 .h2{font-size:clamp(36px,5vw,64px);line-height:1.02;letter-spacing:-.04em;margin-top:16px}
 .sub{color:var(--on-ink-muted);font-size:18px;margin-top:18px;max-width:36em}
 .story{padding-block:120px 20px}
-.story-cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:20px;margin-top:56px}
-.sc3{grid-column:span 3}
-.sc2{grid-column:span 2}
+.story-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(32px,5vw,88px);margin-top:36px;align-items:start}
+.steps{display:flex;flex-direction:column}
+.step{min-height:72vh;display:flex;flex-direction:column;justify-content:center;gap:14px;opacity:.28;transition:opacity .6s var(--ease)}
+.step.active{opacity:1}
+.step .time{font:500 15px var(--f-body);color:var(--carolina-deep)}
+.step h3{font-size:clamp(28px,3vw,42px);line-height:1.14;letter-spacing:-.035em;color:var(--on-paper);display:block}
+.step p{font-size:17.5px;line-height:1.5;color:var(--on-paper-muted);max-width:26em}
+.step .inline{display:none}
+.pin{position:sticky;top:max(84px,calc(50vh - 350px));height:700px;border-radius:34px;overflow:hidden;display:flex;justify-content:center;align-items:flex-start;padding-top:40px;background:linear-gradient(180deg,#8DBDE0,#5E97C7);border:1px solid rgba(255,255,255,.4);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 40px 90px -50px rgba(11,26,46,.55)}
+.pin .phone{margin:0}
 .when{align-self:center;font-size:12px;color:rgba(255,255,255,.55);margin:0 0 4px}
-.card.blue .when{color:rgba(255,255,255,.75)}
 .mini .msg{max-width:88%}
-@media (max-width:980px){.story-cards{grid-template-columns:1fr}.sc3,.sc2{grid-column:auto}}
+@media (max-width:980px){
+  .story-grid{grid-template-columns:1fr;margin-top:12px}
+  .pin{display:none}
+  .step{min-height:0;opacity:1;padding-block:36px;border-top:1px solid var(--line-light)}
+  .step:first-child{border-top:0}
+  .step .inline{display:block;margin-top:14px}
+}
 
 /* ---------- Light half (Loop) ---------- */
 .light{background:var(--paper);color:var(--on-paper);border-radius:40px 40px 0 0;position:relative;z-index:2;color-scheme:light}
@@ -243,7 +255,6 @@ footer p{max-width:46em}
 .nav.onlight .logo{color:var(--navy)}
 .nav.onlight .logo span{color:var(--carolina-deep)}
 .nav.onlight .btn-sm{background:var(--carolina-deep);border-color:rgba(255,255,255,.25);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 6px 16px -8px rgba(47,110,156,.7)}
-.nav.onlight.scrolled .nav-inner::before{background:rgba(255,255,255,.62);border-color:rgba(11,26,46,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 10px 30px -14px rgba(11,26,46,.3)}
 @media (max-width:900px){
   .card{padding:28px 22px 0;min-height:0}
   .viz{padding:22px 0 24px}
@@ -315,42 +326,9 @@ footer p{max-width:46em}
         <span class="eyebrow">A week with frank</span>
         <h2 class="h2">It texts you first, so nothing sneaks up on you.</h2>
       </div>
-      <div class="story-cards">
-        <article class="card blue sc3 reveal">
-          <h3>Missing work, the <span class="tag">same evening</span></h3>
-          <p>If something slips past its deadline, you hear about it that night, not at the end of the semester.</p>
-          <div class="viz"><div class="panel mini"><div class="when">Mon, Oct 19 · 6:45 PM</div><div class="msg in">Missing:
-– ENGL 150: Reading response 6 (was due 5:00pm)</div><div class="msg out">omg submitting rn</div></div></div>
-        </article>
-        <article class="card sc3 reveal reveal-d1">
-          <h3>Ask anything. The <span class="tag">answer</span> comes first.</h3>
-          <p>What's due, your grade, what you need on the final. frank does the math with your course's real weights.</p>
-          <div class="viz"><div class="panel mini"><div class="when">Mon, Oct 19 · 9:12 PM</div><div class="msg out">whats due this week</div><div class="msg in">3 things:
-– Tue ECON 210: Problem Set 5
-– Thu DATA 101: Lab 6
-– Fri STOR 155: Quiz 4</div></div></div>
-        </article>
-        <article class="card sc2 reveal reveal-d2">
-          <h3>A <span class="tag">nudge</span> before every deadline</h3>
-          <p>24 hours and 3 hours before anything is due. New grades and announcements too, within half an hour.</p>
-          <div class="viz"><div class="panel mini"><div class="when">Thu, Oct 22 · 8:59 PM</div><div class="msg in">due in 3h: HIST 128 Response paper 2, 11:59pm</div><div class="msg out">on it</div></div></div>
-        </article>
-        <article class="card sc2 reveal">
-          <h3>The <span class="nb"><span class="tag">week ahead</span>,</span> every Sunday</h3>
-          <p>Everything due in the coming week, and how your grades moved.</p>
-          <div class="viz"><div class="panel mini"><div class="when">Sun, Oct 25 · 6:00 PM</div><div class="msg in">this week:
-– Tue ECON 210: Problem Set 5
-– Thu DATA 101: Lab 6
-ECON 210 is up to 87.4%.</div></div></div>
-        </article>
-        <article class="card sc2 reveal reveal-d1">
-          <h3>A <span class="tag">brief</span> before your first class</h3>
-          <p>Classes, rooms and what's due in the next 48 hours. Pick your own time with /brief.</p>
-          <div class="viz"><div class="panel mini"><div class="when">Mon, Oct 19 · 7:00 AM</div><div class="msg in">morning. Monday, Oct 19
-Classes: 9:05am DATA 101 (Phillips 215)
-Due in the next 48h:
-– Tue 11:59pm ECON 210: Problem Set 4</div><div class="msg out">/brief 8:00</div><div class="msg in">done. your brief comes at 8:00am from tomorrow.</div></div></div>
-        </article>
+      <div class="story-grid">
+        <div class="steps" id="steps"></div>
+        <div class="pin" id="pin" aria-hidden="true"></div>
       </div>
     </div>
   </section>
@@ -566,6 +544,38 @@ Due in the next 48h:
       t+= m[0]==='in'?900:700;
     });
     setTimeout(()=>{const r=heroThread.querySelector('.receipt');if(r)r.innerHTML='<b>Read</b> 9:13 PM'},t+600);
+  }
+
+  /* ---- Week story: steps scroll, the phone in the blue card follows ---- */
+  const steps=[
+    {time:'Monday, 6:45 PM',clock:'6:45',title:'Missing work, the <span class="tag">same evening</span>',body:"If something slips past its deadline, you hear about it that night, not at the end of the semester.",stamp:'Mon, Oct 19 at 6:45 PM',
+     msgs:[['in','Missing:\n– ENGL 150: Reading response 6 (was due 5:00pm)'],['out','omg submitting rn']]},
+    {time:'Monday, 9:12 PM',clock:'9:12',title:'Ask anything. The <span class="tag">answer</span> comes first.',body:"What's due, your grade, what you need on the final. frank does the math with your course's real weights.",stamp:'Mon, Oct 19 at 9:12 PM',
+     msgs:[['out','whats due this week'],['in','3 things:\n– Tue ECON 210: Problem Set 5\n– Thu DATA 101: Lab 6\n– Fri STOR 155: Quiz 4']]},
+    {time:'Thursday, 8:59 PM',clock:'8:59',title:'A <span class="tag">nudge</span> before every deadline',body:'24 hours and 3 hours before anything is due. New grades and announcements too, within half an hour.',stamp:'Thu, Oct 22 at 8:59 PM',
+     msgs:[['in','due in 3h: HIST 128 Response paper 2, 11:59pm'],['out','on it']]},
+    {time:'Sunday, 6:00 PM',clock:'6:00',title:'The <span class="tag">week ahead</span> every Sunday',body:'Everything due in the coming week, and how your grades moved.',stamp:'Sun, Oct 25 at 6:00 PM',
+     msgs:[['in','this week:\n– Tue 11:59pm ECON 210: Problem Set 5\n– Thu 11:59pm DATA 101: Lab 6\n– Fri 10:10am STOR 155: Quiz 4\nECON 210 is up to 87.4%.']]},
+    {time:'Every morning, 7:00 AM',clock:'7:00',title:'A <span class="tag">brief</span> before your first class',body:"Classes, rooms and what's due in the next 48 hours. Pick your own time with /brief.",stamp:'Mon, Oct 19 at 7:00 AM',
+     msgs:[['in','morning. Monday, Oct 19\nClasses: 9:05am DATA 101 (Phillips 215)\nDue in the next 48h:\n– Tue 11:59pm ECON 210: Problem Set 4'],['out','/brief 8:00',1],['in','done. your brief comes at 8:00am from tomorrow.']]}
+  ];
+  const stepsEl=document.getElementById('steps'),pin=document.getElementById('pin');
+  const mini=st=>`<div class="panel mini"><div class="when">${st.stamp.replace(' at ',' · ')}</div>`+st.msgs.map(m=>`<div class="msg ${m[0]}">${esc(m[1])}</div>`).join('')+'</div>';
+  stepsEl.innerHTML=steps.map((st,i)=>`<article class="step${i===0?' active':''}" data-i="${i}"><span class="time">${st.time}</span><h3>${st.title}</h3><p>${esc(st.body)}</p><div class="inline">${mini(st)}</div></article>`).join('');
+  const hp=document.querySelector('.hero .phone .screen');
+  pin.innerHTML='<div class="phone"><div class="screen"><div class="island"></div>'+hp.querySelector('.status').outerHTML+hp.querySelector('.chat-head').outerHTML+'<div class="thread" id="pinThread"></div>'+hp.querySelector('.compose').outerHTML+'</div></div>';
+  const pinThread=document.getElementById('pinThread'),pinClock=pin.querySelector('.status span');
+  let cur=-1;
+  function show(i){
+    if(i===cur)return;cur=i;
+    stepsEl.querySelectorAll('.step').forEach(e=>e.classList.toggle('active',+e.dataset.i===i));
+    pinClock.textContent=steps[i].clock;
+    renderThread(pinThread,steps[i].stamp,steps[i].msgs,!reduce);
+  }
+  show(0);
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)show(+e.target.dataset.i)})},{rootMargin:'-45% 0px -45% 0px'});
+    stepsEl.querySelectorAll('.step').forEach(e=>io.observe(e));
   }
 
   /* ---- Waitlist ---- */
